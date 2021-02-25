@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import DrawingBoard from './components/DrawingBoard'
+import useDrawingState from './hooks/useDrawingState'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { Button, Grid } from '@material-ui/core'
+import initSocketIo, { listenForDrawingChange, notifyDrawingChange } from './socket.io'
+import DrawingConfig from './@types/DrawingConfig'
+
+const useStyles = makeStyles((theme) => createStyles({
+    root: {
+        height: '100%'
+    },
+    drawingBoard: {
+        width: '40vw',
+        height: '40vh',
+        border: '1px solid red',
+        cursor: 'crosshair'
+    }
+}))
+
+const App = () => {
+    React.useEffect(() => {
+        initSocketIo()
+    }, [])
+
+    const [drawingState, { updateDrawingState }] = useDrawingState()
+    const classes = useStyles()
+
+    listenForDrawingChange(updateDrawingState)
+
+    const onUpdateDrawingConfig = (drawConfig: DrawingConfig) => {
+        notifyDrawingChange(drawConfig)
+        updateDrawingState(drawConfig)
+    }
+
+    return (
+        <Grid
+            container
+            direction='column'
+            justify='center'
+            alignItems='center'
+            className={classes.root}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <DrawingBoard
+                className={classes.drawingBoard}
+                drawConfig={drawingState}
+                updateDrawConfig={onUpdateDrawingConfig}
+            />
+            <Button onClick={() => onUpdateDrawingConfig({ ...drawingState, tool: 'eraser' })}>
+                Eraser
+            </Button>
+            <Button onClick={() => onUpdateDrawingConfig({ ...drawingState, tool: 'brush' })}>
+                Brush
+            </Button>
+        </Grid>
+    )
 }
 
-export default App;
+export default App
