@@ -1,12 +1,16 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { reducer as drawingStateReducer } from "./states/drawing-state/drawing-slice";
 import { useDispatch } from 'react-redux'
+import middlewares from "./middlewares";
+
+import { reducer as drawingStateReducer } from "./states/drawing-state/drawing-slice";
+import { reducer as roomStateReducer } from "./states/room-state/room-slice";
 
 const store = configureStore({
     reducer: {
-        drawingState: drawingStateReducer
+        drawingState: drawingStateReducer,
+        room: roomStateReducer
     },
-    middleware: getDefaultMiddleware({ serializableCheck: false, immutableCheck: false })
+    middleware: getDefaultMiddleware({ serializableCheck: false, immutableCheck: false }).concat(middlewares)
 })
 
 export type RootState = ReturnType<typeof store.getState>

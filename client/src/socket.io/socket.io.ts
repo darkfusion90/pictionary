@@ -1,27 +1,34 @@
 import { io, Socket } from "socket.io-client"
 import DrawingConfig from "../@types/DrawingConfig"
 
-export var socket: Socket | undefined
+export var socket: Socket = io('/', { autoConnect: false })
 
-const initSocketIo = () => {
-    socket = io('/')
-    if (socket) {
+const initSocketIo = (): Promise<void> => {
+    socket.connect()
+
+    return new Promise<void>((resolve, reject) => {
         socket.on('connect', () => {
-            console.log('Connect')
+            resolve()
         })
-    }
+
+        socket.on('error', () => {
+            reject()
+        })
+    })
 }
 
-export const notifyDrawingChange = (drawConfig: DrawingConfig) => {
-    if (socket) {
-        socket.emit('draw', drawConfig)
-    }
+export const notifyDrawingChange = (atRoom: string, drawConfig: DrawingConfig) => {
+    socket.emit('draw', atRoom, drawConfig)
 }
 
-export const listenForDrawingChange = (callback: ValueCallback<DrawingConfig>) => {
-    if (socket) {
-        socket.on('draw', callback)
-    }
+export const listenForDrawingChange = (atRoom: string, callback: ValueCallback<DrawingConfig>) => {
+    socket.on('draw', (roomName: string, args: DrawingConfig) => {
+        if (roomName === atRoom) {
+            callback(args)
+        }
+    })
 }
+
+export const joinRoom = (roomName: string) => socket.emit('join', roomName)
 
 export default initSocketIo

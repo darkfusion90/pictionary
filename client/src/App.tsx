@@ -1,11 +1,8 @@
 import React from 'react'
-import DrawingBoard from './components/DrawingBoard'
-import useDrawingState from './hooks/useDrawingState'
 
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { Button, Grid } from '@material-ui/core'
-import initSocketIo, { listenForDrawingChange, notifyDrawingChange } from './socket.io'
-import DrawingConfig from './@types/DrawingConfig'
+import initSocketIo from './socket.io'
+import RouteProvider from './routes'
 
 const useStyles = makeStyles((theme) => createStyles({
     root: {
@@ -20,11 +17,18 @@ const useStyles = makeStyles((theme) => createStyles({
 }))
 
 const App = () => {
-    React.useEffect(() => {
-        initSocketIo()
-    }, [])
+    const [socketConnected, setSocketConnected] = React.useState(false)
 
-    const [drawingState, { updateDrawingState }] = useDrawingState()
+    React.useEffect(() => {
+        if (!socketConnected) {
+            initSocketIo()
+                .then(() => setSocketConnected(true))
+                .catch(() => setSocketConnected(false))
+        }
+    }, [socketConnected])
+
+    /* 
+            const [drawingState, { updateDrawingState }] = useDrawingState()
     const classes = useStyles()
 
     listenForDrawingChange(updateDrawingState)
@@ -54,7 +58,13 @@ const App = () => {
                 Brush
             </Button>
         </Grid>
-    )
+    ) */
+
+    if (!socketConnected) {
+        return <div>Connecting to server...</div>
+    }
+
+    return <RouteProvider />
 }
 
 export default App

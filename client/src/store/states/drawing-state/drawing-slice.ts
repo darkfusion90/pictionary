@@ -12,13 +12,15 @@ const initialDrawingState: DrawingState = {
 
 interface IDrawingStateSliceCaseReducers extends SliceCaseReducers<DrawingState> {
     setDrawingState: CaseReducer<DrawingState, PayloadAction<DrawingState>>
+    setRemoteDrawingState: CaseReducer<DrawingState, PayloadAction<DrawingState>>
 }
 
 const drawingSlice = createSlice<DrawingState, IDrawingStateSliceCaseReducers>({
     name: 'drawingSlice',
     initialState: initialDrawingState,
     reducers: {
-        setDrawingState: (_, action: PayloadAction<DrawingState>) => action.payload
+        setDrawingState: (_, action) => action.payload,
+        setRemoteDrawingState: (_, action) => action.payload
     }
 })
 

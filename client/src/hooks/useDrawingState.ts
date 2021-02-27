@@ -7,6 +7,7 @@ import DrawingState from "../store/states/drawing-state/DrawingState"
 type IUseDrawingStateMeta = DrawingState
 interface IUseDrawingStateActions {
     updateDrawingState: ValueCallback<DrawingState>
+    remoteUpdateDrawingState: ValueCallback<DrawingState>
 }
 
 const useDrawingState = (): Hook<IUseDrawingStateMeta, IUseDrawingStateActions> => {
@@ -15,7 +16,8 @@ const useDrawingState = (): Hook<IUseDrawingStateMeta, IUseDrawingStateActions> 
     return [
         useSelector(selectDrawingState),
         {
-            updateDrawingState: (drawingState) => dispatch(actions.setDrawingState(drawingState))
+            updateDrawingState: (drawingState) => dispatch(actions.setDrawingState(drawingState)),
+            remoteUpdateDrawingState: (drawingState)=>dispatch(actions.setRemoteDrawingState(drawingState))
         }
     ]
 }

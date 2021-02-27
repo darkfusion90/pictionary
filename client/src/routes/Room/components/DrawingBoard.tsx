@@ -1,6 +1,7 @@
 import React from 'react'
-import DrawingConfig from '../@types/DrawingConfig'
-import IPosition from '../@types/Position'
+
+import DrawingConfig from '../../../@types/DrawingConfig'
+import IPosition from '../../../@types/Position'
 
 interface IGestureHandlers {
     onMouseUp?: React.MouseEventHandler
@@ -12,7 +13,7 @@ interface IGestureHandlers {
     onTouchEnd?: React.TouchEventHandler
 }
 
-interface IDrawingBoardProps extends BasicProps {
+export interface IDrawingBoardProps extends BasicProps {
     shouldDisableCanvas?: boolean
     drawConfig: DrawingConfig
     updateDrawConfig: ValueCallback<DrawingConfig>
