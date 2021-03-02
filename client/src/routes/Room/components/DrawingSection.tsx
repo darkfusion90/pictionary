@@ -42,7 +42,7 @@ const DrawingSection: React.FC = () => {
             className={fullHeight}
         >
             <Grid item className={classes.drawingBoardContainer}>
-                <DrawingBoard className={classes.drawingBoard} drawConfig={drawConfig} updateDrawConfig={updateDrawingState} />
+                <DrawingBoard className={classes.drawingBoard} drawConfig={drawConfig} updateDrawConfig={updateDrawingState()} />
             </Grid>
             <Grid item className={classes.drawingToolkitContainer}>
                 <DrawingToolkit />

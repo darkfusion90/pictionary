@@ -10,7 +10,7 @@ const DrawingToolkit: React.FC = () => {
 
     const handleOnToolChange = ({ target }: React.ChangeEvent) => {
         const changedTool = (target as HTMLInputElement).value
-        updateDrawingState({ ...drawingState, tool: changedTool as any })
+        updateDrawingState()({ ...drawingState, tool: changedTool as any })
     }
 
     return (
