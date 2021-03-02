@@ -9,6 +9,7 @@ import { joinRoom, listenForDrawingChange } from '../../socket.io'
 import useDrawingState from '../../hooks/useDrawingState'
 import useRoomState from '../../hooks/useRoomState'
 import { useParams } from 'react-router-dom'
+import GuessSection from './sections/GuessSection'
 
 const useStyles = makeStyles((theme) => createStyles({
     root: {
@@ -21,7 +22,7 @@ const RoomView: React.FC = () => {
     const { roomName } = useParams<{ roomName: string }>()
     const [{ roomName: roomNameInState }, { setRoomName }] = useRoomState()
 
-    const { remoteUpdateDrawingState } = useDrawingState()[1]
+    const { updateDrawingState } = useDrawingState()[1]
 
     const { fullHeight } = useCommonStyles()
     const classes = useStyles()
@@ -32,16 +33,21 @@ const RoomView: React.FC = () => {
             setRoomName(roomName)
         }
 
-        listenForDrawingChange(roomName, remoteUpdateDrawingState)
-    }, [roomName, roomNameInState, setRoomName, remoteUpdateDrawingState])
+        listenForDrawingChange(roomName, updateDrawingState({ notifyPeers: false }))
+    }, [roomName, roomNameInState, setRoomName, updateDrawingState])
 
     return (
         <Grid container className={classes.root}>
             <Grid item xs={8} className={fullHeight}>
                 <DrawingSection />
             </Grid>
-            <Grid item xs={4} className={fullHeight}>
-                <TimerSection />
+            <Grid container item xs={4} alignItems='center' justify='center' className={fullHeight}>
+                <Grid item>
+                    <TimerSection />
+                </Grid>
+                <Grid item>
+                    <GuessSection />
+                </Grid>
             </Grid>
         </Grid>
     )
