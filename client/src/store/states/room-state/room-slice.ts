@@ -1,15 +1,35 @@
-import { CaseReducer, createSlice, PayloadAction, SliceCaseReducers } from "@reduxjs/toolkit";
-import RoomState from "./RoomState";
+import { createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
+
+import { IPeerNotfyCaseReducerWithPrepare, prepareWithNotifyPeersMeta } from "../../utils/notifyPeers-meta-builder";
+import RoomState, { IGameStatus } from "./RoomState";
+
+const initialState: RoomState = {
+    gameStatus: 'uninitiated'
+}
+
+type IRoomStateCaseReducer<P extends any = any> = IPeerNotfyCaseReducerWithPrepare<RoomState, P>
 
 interface IRoomStateSliceCaseReducer extends SliceCaseReducers<RoomState> {
-    setRoomName: CaseReducer<RoomState, PayloadAction<string>>
+    setRoomName: IRoomStateCaseReducer<string>
+    setGameStatus: IRoomStateCaseReducer<IGameStatus>
 }
 
 const roomSlice = createSlice<RoomState, IRoomStateSliceCaseReducer>({
     name: 'roomSlice',
-    initialState: {},
+    initialState,
     reducers: {
-        setRoomName: (_, action) => ({ roomName: action.payload })
+        setRoomName: {
+            reducer: (state, action) => {
+                state.roomName = action.payload
+            },
+            prepare: prepareWithNotifyPeersMeta
+        },
+        setGameStatus: {
+            reducer: (state, action) => {
+                state.gameStatus = action.payload
+            },
+            prepare: prepareWithNotifyPeersMeta
+        }
     }
 })
 

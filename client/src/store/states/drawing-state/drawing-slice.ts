@@ -1,4 +1,5 @@
-import { CaseReducer, createSlice, PayloadAction, SliceCaseReducers } from "@reduxjs/toolkit";
+import { createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
+import { IPeerNotfyCaseReducerWithPrepare, prepareWithNotifyPeersMeta } from "../../utils/notifyPeers-meta-builder";
 import DrawingState from "./DrawingState";
 
 const initialDrawingState: DrawingState = {
@@ -10,17 +11,20 @@ const initialDrawingState: DrawingState = {
     isDrawing: false
 }
 
+type IDrawingStateCaseReducer<P> = IPeerNotfyCaseReducerWithPrepare<DrawingState, P>
+
 interface IDrawingStateSliceCaseReducers extends SliceCaseReducers<DrawingState> {
-    setDrawingState: CaseReducer<DrawingState, PayloadAction<DrawingState>>
-    setRemoteDrawingState: CaseReducer<DrawingState, PayloadAction<DrawingState>>
+    setDrawingState: IDrawingStateCaseReducer<DrawingState>
 }
 
 const drawingSlice = createSlice<DrawingState, IDrawingStateSliceCaseReducers>({
     name: 'drawingSlice',
     initialState: initialDrawingState,
     reducers: {
-        setDrawingState: (_, action) => action.payload,
-        setRemoteDrawingState: (_, action) => action.payload
+        setDrawingState: {
+            reducer: (_, action) => action.payload,
+            prepare: prepareWithNotifyPeersMeta
+        }
     }
 })
 
