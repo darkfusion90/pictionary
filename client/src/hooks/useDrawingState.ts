@@ -3,11 +3,11 @@ import { useAppDispatch } from "../store"
 import { selectDrawingState } from "../store/states/drawing-state/drawing-selectors"
 import { actions } from "../store/states/drawing-state/drawing-slice"
 import DrawingState from "../store/states/drawing-state/DrawingState"
+import { IHookActionWithPeerNotify } from "./utils"
 
 type IUseDrawingStateMeta = DrawingState
 interface IUseDrawingStateActions {
-    updateDrawingState: ValueCallback<DrawingState>
-    remoteUpdateDrawingState: ValueCallback<DrawingState>
+    updateDrawingState: IHookActionWithPeerNotify<DrawingState>
 }
 
 const useDrawingState = (): Hook<IUseDrawingStateMeta, IUseDrawingStateActions> => {
@@ -16,8 +16,7 @@ const useDrawingState = (): Hook<IUseDrawingStateMeta, IUseDrawingStateActions> 
     return [
         useSelector(selectDrawingState),
         {
-            updateDrawingState: (drawingState) => dispatch(actions.setDrawingState(drawingState)),
-            remoteUpdateDrawingState: (drawingState)=>dispatch(actions.setRemoteDrawingState(drawingState))
+            updateDrawingState: (meta) => (drawingState) => dispatch(actions.setDrawingState(drawingState, meta)),
         }
     ]
 }
