@@ -28,7 +28,7 @@ const socketServer = (http: HttpServer): SocketServer => {
 
         log('New socket.io connection')
         socket.on('draw', (atRoom: string, args: IDrawArgs) => {
-            log(`draw at ${atRoom}: `, args)
+            log(`draw at ${atRoom}`)
             socket.broadcast.to(atRoom).emit('draw', atRoom, args)
         })
 
