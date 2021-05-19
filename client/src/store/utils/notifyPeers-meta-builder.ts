@@ -4,10 +4,10 @@ export interface IPeerNotifyMeta {
     notifyPeers: boolean
 }
 
-export type IPayloadActionWithPeerNotifyMeta<Payload> = PayloadAction<Payload, string, IPeerNotifyMeta, void>
+export type IPayloadActionWithPeerNotifyMeta<Payload = any, Meta = {}> = PayloadAction<Payload, string, IPeerNotifyMeta & Meta, void>
 
 // @ts-ignore
-export type IPeerNotfyCaseReducerWithPrepare<State, Payload> = CaseReducerWithPrepare<State, IPayloadActionWithPeerNotifyMeta<Payload>>
+export type IPeerNotfyCaseReducerWithPrepare<State, Payload, Meta = {}> = CaseReducerWithPrepare<State, IPayloadActionWithPeerNotifyMeta<Payload, Meta>>
 
 export const prepareWithNotifyPeersMeta = <P>(payload: P, meta: IPeerNotifyMeta = { notifyPeers: true }) => {
     return {

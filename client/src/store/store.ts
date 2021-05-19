@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux'
 import middlewares from "./middlewares";
 
 import { reducer as drawingStateReducer } from "./states/drawing-state/drawing-slice";
+import { reducer as guessStateReducer } from "./states/guess-state/guess-state-slice";
 import { reducer as roomStateReducer } from "./states/room-state/room-slice";
 
 const store = configureStore({
     reducer: {
         drawingState: drawingStateReducer,
-        room: roomStateReducer
+        room: roomStateReducer,
+        guesses: guessStateReducer
     },
     middleware: getDefaultMiddleware({ serializableCheck: false, immutableCheck: false }).concat(middlewares)
 })

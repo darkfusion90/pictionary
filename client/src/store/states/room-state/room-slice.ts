@@ -7,7 +7,7 @@ const initialState: RoomState = {
     gameStatus: 'uninitiated'
 }
 
-type IRoomStateCaseReducer<P extends any = any> = IPeerNotfyCaseReducerWithPrepare<RoomState, P>
+type IRoomStateCaseReducer<P extends any = any, M = {}> = IPeerNotfyCaseReducerWithPrepare<RoomState, P, M>
 
 interface IRoomStateSliceCaseReducer extends SliceCaseReducers<RoomState> {
     setRoomName: IRoomStateCaseReducer<string>
